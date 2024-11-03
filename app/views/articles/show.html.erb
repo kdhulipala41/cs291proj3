@@ -1,0 +1,52 @@
+<h1><%= @article.title %></h1>
+
+<p><strong>Author:</strong> <%= @article.username %></p>
+<p><strong>Last Updated:</strong> <%= @article.updated_at.strftime("%B %d, %Y %H:%M") %></p>
+
+<p><%= @article.body %></p>
+
+<% if current_user == @article.username %>
+  <ul>
+    <li><%= link_to "Edit", edit_article_path(@article) %></li>
+    <li><%= link_to "Destroy", article_path(@article), data: {
+                      turbo_method: :delete,
+                      turbo_confirm: "Are you sure?"
+                    } %></li>
+  </ul>
+<% end %>
+
+<h2>Comments</h2>
+<% @article.comments.each do |comment| %>
+  <p>
+    <strong>Commenter:</strong>
+    <%= comment.commenter %>
+  </p>
+
+  <p>
+    <strong>Comment:</strong>
+    <%= comment.body %>
+  </p>
+<% end %>
+
+<h2>Add a comment:</h2>
+
+<% if @article.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@article.errors.count, "error") %> prohibited this comment from being saved:</h2>
+    <ul>
+      <% @article.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: [@article, @article.comments.build] do |form| %>
+  <p>
+    <%= form.label :body %><br>
+    <%= form.text_area :body %>
+  </p>
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>

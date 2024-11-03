@@ -1,0 +1,21 @@
+<h1>Beer Fanclub Postboard</h1>
+<h3>Fans of beer unite! Seek help also.</h3>
+
+<% if current_user %>
+  <p>Welcome to the magical land of beer, <%= current_user %>! Brews await you in our halls. <%= link_to "Logout", logout_path, method: :delete %></p>
+<% end %>
+
+<ul>
+  <% @articles.each do |article| %>
+    <li>
+      <strong>Title:</strong> <%= link_to article.title, article %><br>
+      <strong>Author:</strong> <%= article.username %><br>
+      <strong>Comments:</strong> <%= article.comments.count %><br>
+      <strong>Last Updated:</strong> <%= article.updated_at.strftime("%B %d, %Y %H:%M") %>
+      <p><%= article.body %></p>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to "Create a New Article!", new_article_path %>
+
